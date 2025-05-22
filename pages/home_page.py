@@ -5,7 +5,7 @@ from urls import URLs
 
 
 class HomePage(BasePage):
-
+    locators = HomePageLocators
     @allure.step('Нажатие кнопки "Заказать" в хедере')
     def click_order_button_header(self):
         self.click_with_wait(HomePageLocators.ORDER_BUTTON_HEADER)

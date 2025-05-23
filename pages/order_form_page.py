@@ -1,6 +1,9 @@
 import allure
 from locators.order_form_locators import OrderFormLocators
 from pages.base_page import BasePage
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class OrderFormPage(BasePage):
@@ -27,9 +30,10 @@ class OrderFormPage(BasePage):
 
     @allure.step('Заполнить поле "Метро"')
     def set_metro(self, station):
-        self.click(OrderFormLocators.METRO_STATION_FIELD)
         self.send_keys(OrderFormLocators.METRO_STATION_FIELD, station)
-        self.click(OrderFormLocators.SELECTED_STATION)
+        container = self.find_element_with_wait(OrderFormLocators.METRO_STATION_LIST)
+        first_option = container.find_element(*OrderFormLocators.SELECTED_STATION)
+        first_option.click()
         return self
 
     def check_metro_value(self, station):
@@ -44,29 +48,44 @@ class OrderFormPage(BasePage):
 
     @allure.step('Нажать кнопку "Далее"')
     def click_next_button(self):
-        self.click(OrderFormLocators.CONTINUE_BUTTON)
+        element = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(OrderFormLocators.CONTINUE_BUTTON)
+        )
+        self.driver.execute_script("arguments[0].click();", element)
 
     @allure.step('Проверка отображения заголовка второй формы')
     def check_the_title_of_second_form_displaying(self):
-        self.check_displaying_of_element(OrderFormLocators.TITLE_ABOUT_RENT_FORM)
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(OrderFormLocators.TITLE_ABOUT_RENT_FORM)
+        )
 
     @allure.step('Заполнить поле "Дата аренды"')
     def set_rental_date(self):
-        self.click(OrderFormLocators.RENTAL_DATE_FIELD)
-        self.find_element_with_wait(OrderFormLocators.CALENDAR)
+        element = self.find_element_with_wait(OrderFormLocators.RENTAL_DATE_FIELD)
+        self.driver.execute_script("arguments[0].click();", element)
+
+        calendar = self.find_element_with_wait(OrderFormLocators.CALENDAR)
         today = self.find_element_with_wait(OrderFormLocators.TODAY_DATE)
         tomorrow = today.find_element(*OrderFormLocators.TOMORROW_DATE)
-        tomorrow.click()
+        self.driver.execute_script("arguments[0].click();", tomorrow)
         return self
 
     @allure.step('Заполнить поле "Срок аренды"')
     def set_rental_duration(self):
-        self.click(OrderFormLocators.RENTAL_DURATION_FIELD)
-        self.find_element_with_wait(OrderFormLocators.RENTAL_DURATION_LIST)
-        self.click(OrderFormLocators.DROPDOWN_ITEM_RENTAL_PERIOD)
+        placeholder = self.find_element_with_wait(OrderFormLocators.RENTAL_DURATION_FIELD)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(placeholder).click().perform()
+
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(OrderFormLocators.RENTAL_DURATION_LIST)
+        )
+
+        option = self.find_element_with_wait(OrderFormLocators.DROPDOWN_ITEM_RENTAL_PERIOD)
+        actions.move_to_element(option).click().perform()
 
     def set_color_field(self):
-        self.click(OrderFormLocators.CHECKBOX_GREY)
+        checkbox = self.find_element_with_wait(OrderFormLocators.CHECKBOX_GREY)
+        self.driver.execute_script("arguments[0].click();", checkbox)
         return self
 
     def set_comment_field(self, comment):
@@ -75,7 +94,8 @@ class OrderFormPage(BasePage):
 
     @allure.step('Нажать кнопку "Заказать"')
     def click_order_button(self):
-        self.click(OrderFormLocators.ORDER_BUTTON)
+        button = self.find_element_with_wait(OrderFormLocators.ORDER_BUTTON)
+        self.driver.execute_script("arguments[0].click();", button)
         self.find_element_with_wait(OrderFormLocators.POP_UP_CONFIRM_ORDER)
 
     @allure.step('Проверка отображения окна подтверждения после нажатия кнопки Заказать')
@@ -84,9 +104,15 @@ class OrderFormPage(BasePage):
 
     @allure.step('Нажать кнопку "Да" в окне подтверждения заказа')
     def click_yes_button_confirmation_pop_up(self):
-        self.click(OrderFormLocators.YES_BUTTON_POP_UP_CONFIRM_ORDER)
+        yes_button = self.find_element_with_wait(OrderFormLocators.YES_BUTTON_POP_UP_CONFIRM_ORDER)
+        self.driver.execute_script("arguments[0].click();", yes_button)
         self.find_element_with_wait(OrderFormLocators.POP_UP_COMPLETE_ORDER)
         return self
+
+    @allure.step('Закрыть окно успешного оформления заказа')
+    def close_complete_order_popup(self):
+        button = self.find_element_with_wait(OrderFormLocators.BUTTON_VIEW_STATUS)
+        self.driver.execute_script("arguments[0].click();", button)
 
     @allure.step('Заполнение первой части формы и нажатие кнопки "Далее"')
     def personal_information_input(self, name, last_name, address, station, number):

@@ -1,7 +1,8 @@
 import allure
 from locators.home_page_locators import HomePageLocators
 from pages.base_page import BasePage
-from urls import URLs
+from selenium.webdriver.support import expected_conditions as EC
+import time
 
 
 class HomePage(BasePage):
@@ -25,12 +26,14 @@ class HomePage(BasePage):
 
     @allure.step('Скролл до блока "Вопросы о важном"')
     def scroll_to_faq(self):
-        self.scroll_to_element(HomePageLocators.FAQ_ITEMS[7]["question"])
-        self.wait_for_element_to_be_visible(HomePageLocators.FAQ_ITEMS[7]["question"])
+        locator = HomePageLocators.QUESTION_FAQ_8
+        self.scroll_to_element(locator)
+        self.wait_for_element_to_be_visible(locator)
 
     @allure.step('Нажатие на вопрос')
     def click_the_question(self, question_locator):
-        self.click_with_wait(question_locator)
+        self.click_with_wait(question_locator, timeout=15)
+        time.sleep(0.8)
 
     @allure.step('Получение текста ответа')
     def get_the_answer_text(self, answer_locator):
@@ -40,7 +43,7 @@ class HomePage(BasePage):
     def click_logo_yandex_open_dzen_page(self):
         self.click_with_wait(HomePageLocators.LOGO_YANDEX)
         self.switch_to_next_tab()
-        self.wait_url_to_be(URLs.YANDEX_URL)
+        self.wait.until(EC.url_contains("dzen.ru"))
 
     @allure.step('Нажатие на логотип "Самокат"')
     def click_logo_open_home_page(self):

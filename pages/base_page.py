@@ -47,16 +47,15 @@ class BasePage:
         element.send_keys(text)
 
     @allure.step("Клик по элементу с ожиданием видимости")
-    def click_with_wait(self, locator):
-        self.wait_for_element_to_be_visible(locator)
-        self.click(locator)
+    def click_with_wait(self, locator, timeout=10):
+        WebDriverWait(self.driver, timeout).until(
+            EC.element_to_be_clickable(locator)
+        ).click()
 
     @allure.step("Получить текст с элемента")
     def get_text_with_wait(self, locator):
         self.wait_for_element_to_be_visible(locator)
         return self.get_text(locator)
-
-    # Добавленные методы
 
     @allure.step("Поиск элемента с ожиданием видимости")
     def find_element_with_wait(self, *locator):

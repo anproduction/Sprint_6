@@ -34,7 +34,7 @@ class BasePage:
         return element.text
 
     @allure.step("Клик по элементу")
-    def click(self, locator):
+    def click(self, *locator):
         self.wait_for_element_to_be_visible(locator)
         element = self.driver.find_element(*locator)
         element.click()
@@ -55,15 +55,15 @@ class BasePage:
     @allure.step("Получить текст с элемента")
     def get_text_with_wait(self, locator):
         self.wait_for_element_to_be_visible(locator)
-        return self.get_text(locator)
+        return self.get_text(*locator)
 
     @allure.step("Поиск элемента с ожиданием видимости")
-    def find_element_with_wait(self, *locator):
+    def find_element_with_wait(self, locator):
         self.wait_for_element_to_be_visible(locator)
         return self.find_element(*locator)
 
     @allure.step("Проверка отображения элемента")
-    def check_displaying_of_element(self, *locator):
+    def check_displaying_of_element(self, locator):
         element = self.find_element(*locator)
         assert element.is_displayed(), f"Элемент {locator} не отображается"
 

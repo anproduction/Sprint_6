@@ -2,7 +2,7 @@ import allure
 from locators.home_page_locators import HomePageLocators
 from pages.base_page import BasePage
 from selenium.webdriver.support import expected_conditions as EC
-import time
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class HomePage(BasePage):
@@ -33,7 +33,13 @@ class HomePage(BasePage):
     @allure.step('Нажатие на вопрос')
     def click_the_question(self, question_locator):
         self.click_with_wait(question_locator, timeout=15)
-        time.sleep(0.8)
+        answer_locator = (
+            question_locator[0],
+            question_locator[1].replace("question", "answer")
+        )
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(answer_locator)
+        )
 
     @allure.step('Получение текста ответа')
     def get_the_answer_text(self, answer_locator):

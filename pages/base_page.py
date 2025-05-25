@@ -21,12 +21,22 @@ class BasePage:
         return self.driver.find_elements(*locator)
 
     @allure.step("Ожидание видимости элемента с локатором")
-    def wait_for_element_to_be_visible(self, locator):
-        return self.wait.until(EC.visibility_of_element_located(locator))
+    def wait_for_element_to_be_visible(self, locator, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.visibility_of_element_located(locator)
+        )
 
     @allure.step("Ожидание кликабельности элемента с локатором")
-    def wait_for_element_to_be_clickable(self, locator):
-        return self.wait.until(EC.element_to_be_clickable(locator))
+    def wait_for_element_to_be_clickable(self, locator, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.element_to_be_clickable(locator)
+        )
+
+    @allure.step("Ожидание присутствия элемента в DOM")
+    def wait_for_presence_of_element(self, locator, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located(locator)
+        )
 
     @allure.step("Получение текста элемента")
     def get_text(self, *locator):
@@ -72,6 +82,16 @@ class BasePage:
         element = self.wait_for_element_to_be_visible(locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
+    @allure.step("Клик по элементу через JavaScript")
+    def click_by_js(self, locator):
+        element = self.wait_for_element_to_be_visible(locator)
+        self.driver.execute_script("arguments[0].click();", element)
+
+    @allure.step("Ожидание и клик по элементу через JavaScript (по присутствию в DOM)")
+    def wait_for_presence_and_click_js(self, locator, timeout=10):
+        element = self.wait_for_presence_of_element(locator, timeout)
+        self.driver.execute_script("arguments[0].click();", element)
+
     @allure.step("Переключение на следующую вкладку")
     def switch_to_next_tab(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
@@ -79,3 +99,9 @@ class BasePage:
     @allure.step("Ожидание URL")
     def wait_url_to_be(self, url):
         return self.wait.until(EC.url_to_be(url))
+
+    @allure.step("Ожидание, пока URL будет содержать подстроку")
+    def wait_url_contains(self, partial_url, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.url_contains(partial_url)
+        )

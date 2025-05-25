@@ -18,7 +18,7 @@ class OrderFormLocators:
     RENTAL_DATE_FIELD = (By.XPATH, "//input[@placeholder='* Когда привезти самокат']")
     CALENDAR = (By.CLASS_NAME, 'react-datepicker__month-container')
     TODAY_DATE = (By.CSS_SELECTOR, 'div.react-datepicker__day--today')
-    TOMORROW_DATE = (By.XPATH, "following-sibling::div[1]")
+    TOMORROW_DATE = (By.XPATH, "//div[contains(@class, 'react-datepicker__day') and text()='30']")
     RENTAL_DURATION_FIELD = (By.CLASS_NAME, 'Dropdown-placeholder')
     RENTAL_DURATION_LIST = (By.CLASS_NAME, 'Dropdown-menu')
     DROPDOWN_ITEM_RENTAL_PERIOD = (By.XPATH, ".//div[@class = 'Dropdown-menu']/div[text() ='трое суток']")

@@ -1,8 +1,6 @@
 import allure
 from locators.home_page_locators import HomePageLocators
 from pages.base_page import BasePage
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 class HomePage(BasePage):
@@ -37,9 +35,7 @@ class HomePage(BasePage):
             question_locator[0],
             question_locator[1].replace("question", "answer")
         )
-        WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(answer_locator)
-        )
+        self.wait_for_element_to_be_visible(answer_locator)
 
     @allure.step('Получение текста ответа')
     def get_the_answer_text(self, answer_locator):
@@ -49,7 +45,7 @@ class HomePage(BasePage):
     def click_logo_yandex_open_dzen_page(self):
         self.click_with_wait(HomePageLocators.LOGO_YANDEX)
         self.switch_to_next_tab()
-        self.wait.until(EC.url_contains("dzen.ru"))
+        self.wait_url_contains("dzen.ru")
 
     @allure.step('Нажатие на логотип "Самокат"')
     def click_logo_open_home_page(self):

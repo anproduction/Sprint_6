@@ -105,3 +105,7 @@ class BasePage:
         return WebDriverWait(self.driver, timeout).until(
             EC.url_contains(partial_url)
         )
+
+    @allure.step("Получить текущий URL страницы")
+    def get_current_url(self):
+        return self.driver.current_url

@@ -28,11 +28,11 @@ def test_successful_order_flow_header(driver, user_data):
 
     home_page.click_logo_open_home_page()
     home_page.wait_url_to_be(URLs.BASE_URL)
-    assert driver.current_url == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
+    assert home_page.get_current_url() == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
 
     home_page.click_logo_yandex_open_dzen_page()
     home_page.wait_url_to_be(URLs.YANDEX_URL)
-    assert driver.current_url == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
+    assert home_page.get_current_url() == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
 
     # Повторный заказ с тела страницы:
     handles = driver.window_handles
@@ -56,11 +56,11 @@ def test_successful_order_flow_header(driver, user_data):
 
     home_page.click_logo_open_home_page()
     home_page.wait_url_to_be(URLs.BASE_URL)
-    assert driver.current_url == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
+    assert home_page.get_current_url() == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
 
     home_page.click_logo_yandex_open_dzen_page()
     home_page.wait_url_to_be(URLs.YANDEX_URL)
-    assert driver.current_url == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
+    assert home_page.get_current_url() == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
 
 
 @pytest.mark.parametrize("user_data", ORDER_USERS)
@@ -88,11 +88,11 @@ def test_successful_order_flow_body(driver, user_data):
 
     home_page.click_logo_open_home_page()
     home_page.wait_url_to_be(URLs.BASE_URL)
-    assert driver.current_url == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
+    assert home_page.get_current_url() == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
 
     home_page.click_logo_yandex_open_dzen_page()
     home_page.wait_url_to_be(URLs.YANDEX_URL)
-    assert driver.current_url == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
+    assert home_page.get_current_url() == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
 
     # Повторный заказ с хедера:
     handles = driver.window_handles
@@ -115,8 +115,9 @@ def test_successful_order_flow_body(driver, user_data):
 
     home_page.click_logo_open_home_page()
     home_page.wait_url_to_be(URLs.BASE_URL)
-    assert driver.current_url == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
+    assert home_page.get_current_url() == URLs.BASE_URL, "Переход по логотипу Самоката на главную страницу"
 
     home_page.click_logo_yandex_open_dzen_page()
     home_page.wait_url_to_be(URLs.YANDEX_URL)
-    assert driver.current_url == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
+    assert home_page.get_current_url() == URLs.YANDEX_URL, "Переход по логотипу Яндекса на страницу Дзена"
+

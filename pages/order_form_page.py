@@ -54,13 +54,10 @@ class OrderFormPage(BasePage):
 
     @allure.step('Заполнить поле "Дата аренды"')
     def set_rental_date(self):
-        element = self.find_element_with_wait(OrderFormLocators.RENTAL_DATE_FIELD)
         self.click_by_js(OrderFormLocators.RENTAL_DATE_FIELD)
-
-        calendar = self.find_element_with_wait(OrderFormLocators.CALENDAR)
-        today = self.find_element_with_wait(OrderFormLocators.TODAY_DATE)
-        tomorrow = today.find_element(*OrderFormLocators.TOMORROW_DATE)
-        self.driver.execute_script("arguments[0].click();", tomorrow)
+        self.find_element_with_wait(OrderFormLocators.CALENDAR)
+        self.find_element_with_wait(OrderFormLocators.TODAY_DATE)
+        self.click_by_js(OrderFormLocators.TOMORROW_DATE)
         return self
 
     @allure.step('Заполнить поле "Срок аренды"')
